@@ -1,0 +1,180 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "config": {
+      "isWizard": false,
+      "basics": {
+        "description": "**TMG Rewind Avatar** — One-click deploy of the Project Rewind real-time avatar demo for TMG SEs and Specialists. Provisions an AI Foundry account, realtime model deployment, and a Container App with a fully-parameterized voice + avatar.",
+        "location": {
+          "label": "Region",
+          "toolTip": "Pick a region that hosts the Voice Live realtime models.",
+          "resourceTypes": [
+            "Microsoft.App/containerApps",
+            "Microsoft.CognitiveServices/accounts"
+          ],
+          "allowedValues": ["eastus2", "swedencentral", "japaneast"]
+        }
+      }
+    },
+    "basics": [
+      {
+        "name": "resourcePrefix",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Resource prefix",
+        "defaultValue": "tmgrewind",
+        "toolTip": "3–10 lowercase characters used in resource names.",
+        "constraints": {
+          "required": true,
+          "regex": "^[a-z][a-z0-9]{2,9}$",
+          "validationMessage": "3–10 lowercase letters/digits, starting with a letter."
+        }
+      },
+      {
+        "name": "environmentName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Environment tag",
+        "defaultValue": "demo",
+        "toolTip": "Free-form tag — e.g. demo, dev, henry-review.",
+        "constraints": {
+          "required": true
+        }
+      }
+    ],
+    "steps": [
+      {
+        "name": "branding",
+        "label": "Avatar branding",
+        "elements": [
+          {
+            "name": "voiceLiveModel",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Realtime model",
+            "defaultValue": "gpt-realtime",
+            "toolTip": "Voice Live realtime model. `gpt-realtime` is the current GA recommendation.",
+            "constraints": {
+              "allowedValues": [
+                { "label": "gpt-realtime (GA)",                    "value": "gpt-realtime" },
+                { "label": "gpt-4o-mini-realtime (GA)",            "value": "gpt-4o-mini-realtime" },
+                { "label": "gpt-4o-realtime-preview (legacy)",     "value": "gpt-4o-realtime-preview" },
+                { "label": "gpt-4o-mini-realtime-preview (legacy)","value": "gpt-4o-mini-realtime-preview" }
+              ],
+              "required": true
+            }
+          },
+          {
+            "name": "voiceLiveModelVersion",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Realtime model version",
+            "defaultValue": "2025-08-28",
+            "toolTip": "Pair with the model: gpt-realtime → 2025-08-28, gpt-4o-realtime-preview → 2024-12-17.",
+            "constraints": { "required": true }
+          },
+          {
+            "name": "voiceLiveModelCapacity",
+            "type": "Microsoft.Common.Slider",
+            "label": "Realtime model capacity (TPM units)",
+            "min": 1,
+            "max": 100,
+            "defaultValue": 10,
+            "toolTip": "Quota in shared subscriptions is tight. Start small."
+          },
+          {
+            "name": "defaultVoice",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Default TTS voice",
+            "defaultValue": "en-US-AvaMultilingualNeural",
+            "toolTip": "Any Azure Speech voice short name."
+          },
+          {
+            "name": "defaultAvatarCharacter",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Default avatar character",
+            "defaultValue": "lisa",
+            "constraints": {
+              "allowedValues": [
+                { "label": "Lisa",  "value": "lisa" },
+                { "label": "Harry", "value": "harry" },
+                { "label": "Layla", "value": "layla" }
+              ],
+              "required": true
+            }
+          },
+          {
+            "name": "defaultBackgroundImageUrl",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Default background image URL",
+            "defaultValue": "",
+            "toolTip": "Public HTTPS URL. Leave blank to use the bundled background.png."
+          },
+          {
+            "name": "defaultSystemPrompt",
+            "type": "Microsoft.Common.TextBox",
+            "multiLine": true,
+            "label": "Default system prompt",
+            "defaultValue": "You are MAX, a friendly content guide for a TV streaming service. Help the viewer find a movie or show for tonight. Keep replies short, warm, and conversational.",
+            "toolTip": "The agent persona presented to the realtime model.",
+            "constraints": { "required": true }
+          }
+        ]
+      },
+      {
+        "name": "sizing",
+        "label": "Sizing & image",
+        "elements": [
+          {
+            "name": "skuTier",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Container Apps workload profile",
+            "defaultValue": "Consumption",
+            "constraints": {
+              "allowedValues": [
+                { "label": "Consumption (scale-to-zero)", "value": "Consumption" },
+                { "label": "Dedicated D4",                "value": "Dedicated-D4" },
+                { "label": "Dedicated D8",                "value": "Dedicated-D8" }
+              ],
+              "required": true
+            }
+          },
+          {
+            "name": "containerImage",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Container image",
+            "defaultValue": "ghcr.io/swilliamsjr/tmg-rewind-avatar:latest",
+            "toolTip": "Override to point at your fork's image."
+          },
+          {
+            "name": "minReplicas",
+            "type": "Microsoft.Common.Slider",
+            "label": "Min replicas",
+            "min": 0, "max": 10, "defaultValue": 0,
+            "toolTip": "0 = scale-to-zero (cold start ~10s); 1 = always-warm."
+          },
+          {
+            "name": "maxReplicas",
+            "type": "Microsoft.Common.Slider",
+            "label": "Max replicas",
+            "min": 1, "max": 30, "defaultValue": 3
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "location":                  "[location()]",
+      "resourcePrefix":            "[basics('resourcePrefix')]",
+      "environmentName":           "[basics('environmentName')]",
+      "voiceLiveModel":            "[steps('branding').voiceLiveModel]",
+      "voiceLiveModelVersion":     "[steps('branding').voiceLiveModelVersion]",
+      "voiceLiveModelCapacity":    "[steps('branding').voiceLiveModelCapacity]",
+      "defaultVoice":              "[steps('branding').defaultVoice]",
+      "defaultAvatarCharacter":    "[steps('branding').defaultAvatarCharacter]",
+      "defaultBackgroundImageUrl": "[steps('branding').defaultBackgroundImageUrl]",
+      "defaultSystemPrompt":       "[steps('branding').defaultSystemPrompt]",
+      "skuTier":                   "[steps('sizing').skuTier]",
+      "containerImage":            "[steps('sizing').containerImage]",
+      "minReplicas":               "[steps('sizing').minReplicas]",
+      "maxReplicas":               "[steps('sizing').maxReplicas]"
+    }
+  }
+}

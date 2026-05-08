@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": { "value": "eastus2" },
+    "resourcePrefix": { "value": "tmgrewind" },
+    "environmentName": { "value": "demo" },
+    "voiceLiveModel": { "value": "gpt-realtime" },
+    "voiceLiveModelVersion": { "value": "2025-08-28" },
+    "voiceLiveModelCapacity": { "value": 10 },
+    "defaultVoice": { "value": "en-US-AvaMultilingualNeural" },
+    "defaultAvatarCharacter": { "value": "lisa" },
+    "defaultBackgroundImageUrl": { "value": "" },
+    "defaultSystemPrompt": {
+      "value": "You are MAX, a friendly content guide for a TV streaming service. Help the viewer find a movie or show for tonight. Keep replies short, warm, and conversational."
+    },
+    "skuTier": { "value": "Consumption" },
+    "containerImage": { "value": "ghcr.io/swilliamsjr/tmg-rewind-avatar:latest" },
+    "minReplicas": { "value": 0 },
+    "maxReplicas": { "value": 3 }
+  }
+}

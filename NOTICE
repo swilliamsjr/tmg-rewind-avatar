@@ -1,0 +1,19 @@
+tmg-rewind-avatar
+=================
+
+This repository vendors application code from Microsoft's Voice Live samples:
+
+  Project: Azure AI Speech Service - Voice Live Samples
+  Repository: https://github.com/microsoft-foundry/voicelive-samples
+  Subdirectory: python/voice-live-avatar/
+  License: MIT (Copyright (c) Microsoft Corporation)
+
+The vendored files in `app/` are based on that upstream sample with
+modifications for production deployment via Azure Container Apps:
+
+  - Hardened Dockerfile (non-root user, healthcheck, no .env COPY)
+  - Environment variables documented in `app/.env.example`
+  - Frontend "Reset to deployed defaults" affordance
+  - `/api/diag` endpoint for Solution Engineer troubleshooting
+
+Refer to `app/UPSTREAM_LICENSE` for the original MIT license text.

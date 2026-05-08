@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Bicep build artifacts that drift (azuredeploy.json IS committed — it's the Deploy-to-Azure target)
+infra/*.bicepparam.json
+
+# Azure
+.azure/
+
+# Node (in case anyone adds frontend tooling later)
+node_modules/
+dist/
