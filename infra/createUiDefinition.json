@@ -77,8 +77,8 @@
             "label": "Realtime model capacity (TPM units)",
             "min": 1,
             "max": 100,
-            "defaultValue": 10,
-            "toolTip": "Quota in shared subscriptions is tight. Start small."
+            "defaultValue": 1,
+            "toolTip": "Quota in shared subscriptions is tight. Default 1 (=1K TPM) is the minimum for a single-user demo. Bump to 5+ for sustained use; default subscription ceiling for `gpt-realtime — GlobalStandard` is often 10."
           },
           {
             "name": "defaultVoice",
