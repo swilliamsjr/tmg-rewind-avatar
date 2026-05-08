@@ -4,7 +4,12 @@ You'll need:
 
 - An Azure subscription where you are **Owner** (or Contributor + User Access Administrator).
 - The subscription must be in a region that hosts Voice Live realtime models. At time of writing: **East US 2, Sweden Central, Japan East**.
-- Realtime model quota of at least **10 TPM units**. (The portal will surface a warning mid-deploy if you don't.)
+- **Realtime model quota of at least 1 TPM unit** in that region. The default capacity in this template is `1`, which works on a fresh subscription with no other realtime deployments. If you already have other `gpt-realtime` deployments using your quota, either:
+  - lower this template's capacity further by editing `voiceLiveModelCapacity` to fit available headroom, OR
+  - request a quota increase via Azure AI Foundry → Quotas, OR
+  - delete an existing realtime deployment to free capacity.
+
+  Default subscription quota in `eastus2` is typically `10` for `gpt-realtime — GlobalStandard`. Bump the template's `voiceLiveModelCapacity` to `5` or higher for sustained multi-user demos.
 
 ## 1. Click the button
 

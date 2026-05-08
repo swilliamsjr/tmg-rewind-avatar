@@ -7,7 +7,7 @@
     "environmentName": { "value": "demo" },
     "voiceLiveModel": { "value": "gpt-realtime" },
     "voiceLiveModelVersion": { "value": "2025-08-28" },
-    "voiceLiveModelCapacity": { "value": 10 },
+    "voiceLiveModelCapacity": { "value": 1 },
     "defaultVoice": { "value": "en-US-AvaMultilingualNeural" },
     "defaultAvatarCharacter": { "value": "lisa" },
     "defaultBackgroundImageUrl": { "value": "" },

@@ -52,10 +52,10 @@ param voiceLiveModel string = 'gpt-realtime'
 @description('Realtime model version. Pair with voiceLiveModel: gpt-realtime → 2025-08-28, gpt-4o-realtime-preview → 2024-12-17.')
 param voiceLiveModelVersion string = '2025-08-28'
 
-@description('Realtime model capacity (TPM units). Keep low — quota in shared subscriptions is tight.')
+@description('Realtime model capacity in thousands of tokens per minute (TPM). Default 1 (=1K TPM) is the minimum for a single-user demo. Bump to 5+ for sustained use; quota in shared subscriptions is tight (default ceiling is often 10).')
 @minValue(1)
 @maxValue(100)
-param voiceLiveModelCapacity int = 10
+param voiceLiveModelCapacity int = 1
 
 @description('Default TTS voice for the avatar. See Microsoft Speech voices list.')
 param defaultVoice string = 'en-US-AvaMultilingualNeural'

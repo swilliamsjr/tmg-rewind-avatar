@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.42.1.51946",
-      "templateHash": "9784738266194263409"
+      "templateHash": "10010174240801759602"
     }
   },
   "parameters": {
@@ -59,11 +59,11 @@
     },
     "voiceLiveModelCapacity": {
       "type": "int",
-      "defaultValue": 10,
+      "defaultValue": 1,
       "minValue": 1,
       "maxValue": 100,
       "metadata": {
-        "description": "Realtime model capacity (TPM units). Keep low — quota in shared subscriptions is tight."
+        "description": "Realtime model capacity in thousands of tokens per minute (TPM). Default 1 (=1K TPM) is the minimum for a single-user demo. Bump to 5+ for sustained use; quota in shared subscriptions is tight (default ceiling is often 10)."
       }
     },
     "defaultVoice": {
