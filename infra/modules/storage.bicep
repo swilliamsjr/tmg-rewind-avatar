@@ -1,4 +1,4 @@
-@description('Storage account hosting a `backgrounds` blob container for avatar background images.')
+@description('Storage account hosting a private `backgrounds` blob container for avatar background images. Container is private (subscription policy denies public blob access); SEs upload custom backgrounds via Azure Portal Storage Browser and generate read-SAS URLs to paste into the runtime config panel.')
 param name string
 param location string
 param tags object
@@ -11,7 +11,7 @@ resource sa 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   kind: 'StorageV2'
   properties: {
     minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: true
+    allowBlobPublicAccess: false
     supportsHttpsTrafficOnly: true
     accessTier: 'Hot'
     publicNetworkAccess: 'Enabled'
@@ -40,7 +40,7 @@ resource backgroundsContainer 'Microsoft.Storage/storageAccounts/blobServices/co
   parent: blobService
   name: 'backgrounds'
   properties: {
-    publicAccess: 'Blob'
+    publicAccess: 'None'
   }
 }
 

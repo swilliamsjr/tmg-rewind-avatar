@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.42.1.51946",
-      "templateHash": "10010174240801759602"
+      "templateHash": "14142476503153211365"
     }
   },
   "parameters": {
@@ -368,7 +368,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.42.1.51946",
-              "templateHash": "17052948793850797896"
+              "templateHash": "2443096236331596452"
             }
           },
           "parameters": {
@@ -401,7 +401,6 @@
                 "enableRbacAuthorization": true,
                 "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 7,
-                "enablePurgeProtection": false,
                 "publicNetworkAccess": "Enabled"
               }
             }
@@ -450,14 +449,14 @@
             "_generator": {
               "name": "bicep",
               "version": "0.42.1.51946",
-              "templateHash": "4001547535024331800"
+              "templateHash": "2696967496184048265"
             }
           },
           "parameters": {
             "name": {
               "type": "string",
               "metadata": {
-                "description": "Storage account hosting a `backgrounds` blob container for avatar background images."
+                "description": "Storage account hosting a private `backgrounds` blob container for avatar background images. Container is private (subscription policy denies public blob access); SEs upload custom backgrounds via Azure Portal Storage Browser and generate read-SAS URLs to paste into the runtime config panel."
               }
             },
             "location": {
@@ -480,7 +479,7 @@
               "kind": "StorageV2",
               "properties": {
                 "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": true,
+                "allowBlobPublicAccess": false,
                 "supportsHttpsTrafficOnly": true,
                 "accessTier": "Hot",
                 "publicNetworkAccess": "Enabled"
@@ -521,7 +520,7 @@
               "apiVersion": "2023-05-01",
               "name": "[format('{0}/{1}/{2}', parameters('name'), 'default', 'backgrounds')]",
               "properties": {
-                "publicAccess": "Blob"
+                "publicAccess": "None"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('name'), 'default')]"
@@ -591,7 +590,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.42.1.51946",
-              "templateHash": "6462028761909835566"
+              "templateHash": "10661557627816714398"
             }
           },
           "parameters": {
@@ -628,7 +627,7 @@
           "resources": [
             {
               "type": "Microsoft.CognitiveServices/accounts",
-              "apiVersion": "2024-10-01",
+              "apiVersion": "2025-09-01",
               "name": "[parameters('accountName')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
@@ -642,7 +641,8 @@
               "properties": {
                 "customSubDomainName": "[parameters('accountName')]",
                 "publicNetworkAccess": "Enabled",
-                "disableLocalAuth": false
+                "disableLocalAuth": false,
+                "allowProjectManagement": true
               }
             },
             {
@@ -664,7 +664,7 @@
             },
             {
               "type": "Microsoft.CognitiveServices/accounts/deployments",
-              "apiVersion": "2024-10-01",
+              "apiVersion": "2025-09-01",
               "name": "[format('{0}/{1}', parameters('accountName'), parameters('modelDeploymentName'))]",
               "sku": {
                 "name": "GlobalStandard",
@@ -691,7 +691,7 @@
             },
             "endpoint": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('accountName')), '2024-10-01').endpoint]"
+              "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('accountName')), '2025-09-01').endpoint]"
             },
             "projectName": {
               "type": "string",

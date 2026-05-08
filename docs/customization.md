@@ -41,22 +41,38 @@ Browser `localStorage` keys are scoped per origin, so each SE's machine can hold
 
 ## Uploading background images
 
-The Bicep provisions a public-read blob container called `backgrounds` on the deployed storage account.
+The Bicep provisions a **private** blob container called `backgrounds` on the deployed storage account (subscription policy denies public blob access). Upload the image, then generate a read-only SAS URL to paste into the runtime config panel.
 
 ```powershell
 $rg     = "rg-tmg-rewind-demo"
-$st     = (az group show -n $rg --query 'tags.storageAccountName' -o tsv)
+$st     = (az resource list -g $rg --resource-type Microsoft.Storage/storageAccounts --query '[0].name' -o tsv)
+
+# 1. Upload (uses your Azure AD identity — needs Storage Blob Data Contributor)
 az storage blob upload `
     --account-name $st `
     --container-name backgrounds `
     --name dish-night.png `
     --file ./assets/dish-night.png `
     --auth-mode login
+
+# 2. Generate a read-only SAS URL (valid 90 days)
+$expiry = (Get-Date).AddDays(90).ToString("yyyy-MM-ddTHH:mm:ssZ")
+$sas = az storage blob generate-sas `
+    --account-name $st `
+    --container-name backgrounds `
+    --name dish-night.png `
+    --permissions r `
+    --expiry $expiry `
+    --auth-mode login `
+    --as-user `
+    --full-uri -o tsv
+Write-Host "Paste this URL into the runtime Background image URL field:"
+Write-Host $sas
 ```
 
-The URL is then `https://<st>.blob.core.windows.net/backgrounds/dish-night.png`.
+Paste the SAS URL into the in-page **Configuration → Background image URL** field. It is fetched directly by the browser via the SAS query string, no app changes needed.
 
-> Switch the storage container to `private` and use a SAS token if you don't want backgrounds publicly fetchable.
+> If you want to host backgrounds outside Azure, **any HTTPS URL works** — GitHub raw, your CDN, an S3 bucket, etc. The runtime config field is a free-form URL.
 
 ## Switching realtime models
 

@@ -10,7 +10,7 @@ param modelVersion string
 param modelCapacity int
 param tags object
 
-resource account 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
+resource account 'Microsoft.CognitiveServices/accounts@2025-09-01' = {
   name: accountName
   location: location
   tags: tags
@@ -25,6 +25,7 @@ resource account 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
     customSubDomainName: accountName
     publicNetworkAccess: 'Enabled'
     disableLocalAuth: false
+    allowProjectManagement: true
   }
 }
 
@@ -42,7 +43,7 @@ resource project 'Microsoft.CognitiveServices/accounts/projects@2025-04-01-previ
   }
 }
 
-resource modelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+resource modelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2025-09-01' = {
   parent: account
   name: modelDeploymentName
   sku: {
